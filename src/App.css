@@ -1,5 +1,6 @@
 .nav {
   position: fixed;
+  z-index: 9000;
   width: 100%;
   top: 0;
   height: 40px;
@@ -70,6 +71,7 @@
 .carousel {
   display: flex;
   position: relative;
+  cursor: pointer ;
   .carousel-image {
     margin: 0;
     width: 100%;
@@ -130,4 +132,7 @@
     right: 5%;
     cursor: pointer;
   }
+}
+.newNavbar{
+  background-color: #000;
 }

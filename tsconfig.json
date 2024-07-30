@@ -7,5 +7,13 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "./dist", // Çıkış dizini örneği, isteğinize göre ayarlayabilirsiniz
+    "module": "commonjs", // veya başka bir modül sistemi
+    "target": "es6", // veya başka bir hedef
+    "strict": true // veya başka bir sıkı denetim ayarı
+  }
 }

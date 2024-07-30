@@ -5,14 +5,33 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Trailers from './Trailers';
 
-function Row({ title, fetchURL }) {
-  const [movies, setMovies] = useState([]);
-  const [trailerMovie, setTrailerMovies] = useState(null);
-  const [movieVisibility, setMovieVisibility] = useState(false);
+// Movie ve RowProps türlerini tanımlıyoruz
+interface Movie {
+  id: number;
+  title?: string;
+  name?: string;
+  poster_path?: string;
+  overview?: string;
+  [key: string]: any; // Geriye kalan özellikler için dinamik bir tür
+}
+
+interface RowProps {
+  title: string;
+  fetchURL: string;
+}
+
+function Row({ title, fetchURL }: RowProps) {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [trailerMovie, setTrailerMovies] = useState<Movie | null>(null);
+  const [movieVisibility, setMovieVisibility] = useState<boolean>(false);
 
   const fetchData = async () => {
-    const res = await axios.get(fetchURL);
-    setMovies(res.data.results);
+    try {
+      const res = await axios.get(fetchURL);
+      setMovies(res.data.results);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
 
   useEffect(() => {
@@ -60,7 +79,6 @@ function Row({ title, fetchURL }) {
           ))}
         </Carousel>
       )}
-      
     </div>
   );
 }

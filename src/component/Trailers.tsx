@@ -2,9 +2,21 @@ import React, { useEffect, useState } from 'react';
 import movieTrailer from 'movie-trailer';
 import YouTube from 'react-youtube';
 
-function Trailers({ movie, setMovieVisibility }) {
-  const [videoUrl, setVideoUrl] = useState(null);
-  console.log(movie)
+// Movie ve TrailersProps türlerini tanımlıyoruz
+interface Movie {
+  title?: string;
+  name?: string;
+  overview?: string;
+}
+
+interface TrailersProps {
+  movie: Movie;
+  setMovieVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Trailers: React.FC<TrailersProps> = ({ movie, setMovieVisibility }) => {
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+
   const ops = {
     height: '398',
     width: '100%',
@@ -14,15 +26,15 @@ function Trailers({ movie, setMovieVisibility }) {
   };
 
   const handleTrailerVisibility = () => {
-    setVideoUrl(null)
+    setVideoUrl(null);
     setMovieVisibility(false);
   };
 
   const fetchVideo = async () => {
-    if (movie.title || movie.name) {
+    const query = movie.title || movie.name;
+    if (query) {
       try {
-        // movieTrailer kullanarak fragmanı buluyoruz
-        const url = await movieTrailer(movie.title || movie.name);
+        const url = await movieTrailer(query);
         setVideoUrl(url);
       } catch (error) {
         console.error('Error fetching video:', error);
@@ -37,13 +49,14 @@ function Trailers({ movie, setMovieVisibility }) {
   return (
     <div className='trailer-container'>
       <span onClick={handleTrailerVisibility} className='off-btn'>X</span>
+      <h2>{movie?.title||movie?.name}</h2>
       {videoUrl ? (
-        <YouTube videoId={new URL(videoUrl).searchParams.get('v')} opts={ops} className='trailer-box'/>
+        <YouTube videoId={new URL(videoUrl).searchParams.get('v') || ''} opts={ops} className='trailer-box'/>
       ) : (
         <p>No videos available.</p>
       )}
       <h3>Movie Description</h3>
-      <span>{movie?.overview}</span>
+      <span>{movie?.overview || 'No overview available.'}</span>
     </div>
   );
 }
