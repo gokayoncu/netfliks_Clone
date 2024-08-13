@@ -4,9 +4,10 @@ import RowItem from './RowItem';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Trailers from './Trailers';
+import { NavLink } from 'react-router-dom';
 
 // Movie ve RowProps türlerini tanımlıyoruz
-interface Movie {
+export interface Movie {
   id: number;
   title?: string;
   name?: string;
@@ -15,12 +16,13 @@ interface Movie {
   [key: string]: any; // Geriye kalan özellikler için dinamik bir tür
 }
 
-interface RowProps {
+export interface RowProps {
   title: string;
   fetchURL: string;
+  setHomePage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Row({ title, fetchURL }: RowProps) {
+function Row({ title, fetchURL, setHomePage }: RowProps) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [trailerMovie, setTrailerMovies] = useState<Movie | null>(null);
   const [movieVisibility, setMovieVisibility] = useState<boolean>(false);
@@ -56,10 +58,15 @@ function Row({ title, fetchURL }: RowProps) {
       items: 1
     }
   };
-
+  const handleShowPage=()=>{
+    setHomePage(false)
+  }
   return (
     <div>
-      <h2 className='title-header'>{title}</h2>
+      <div className='title-header'>
+        <h2>{title}</h2>
+        <NavLink to={`/${title}`} onClick={handleShowPage}>(More İnformation)</NavLink>
+      </div>
       {movieVisibility && trailerMovie && (
         <Trailers 
           movie={trailerMovie} 
